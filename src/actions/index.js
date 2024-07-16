@@ -94,9 +94,9 @@ function pause(data) {
   };
 }
 
-function music(data) {
+function musicMute(data) {
   return {
-    type: reducerType.MUSIC,
+    type: reducerType.MUSIC_MUTE,
     data,
   };
 }
@@ -123,6 +123,6 @@ export default {
   drop,
   pause,
   keyboard,
-  music,
+  musicMute,
   focus,
 };

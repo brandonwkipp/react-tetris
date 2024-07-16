@@ -13,7 +13,7 @@ const down = (store) => {
       if (store.getState().get('lock')) {
         return;
       }
-      store.dispatch(actions.music(!store.getState().get('music')));
+      store.dispatch(actions.musicMute(!store.getState().get('music').mute));
     },
   });
 };

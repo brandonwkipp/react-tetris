@@ -99,7 +99,7 @@ class App extends React.Component {
               <Logo cur={!!this.props.cur} reset={this.props.reset} />
               <div className={style.state}>
                 <Point cur={!!this.props.cur} point={this.props.points} max={this.props.max} />
-                <p>{ this.props.cur ? i18n.cleans[lan] : i18n.startLine[lan] }</p>
+                <p>{this.props.cur ? i18n.cleans[lan] : i18n.startLine[lan]}</p>
                 <Number number={this.props.cur ? this.props.clearLines : this.props.startLines} />
                 <p>{i18n.level[lan]}</p>
                 <Number
@@ -125,7 +125,7 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  music: propTypes.bool.isRequired,
+  music: propTypes.object.isRequired,
   pause: propTypes.bool.isRequired,
   matrix: propTypes.object.isRequired,
   next: propTypes.string.isRequired,

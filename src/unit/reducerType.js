@@ -1,5 +1,5 @@
 export const PAUSE = 'PAUSE';
-export const MUSIC = 'MUSIC';
+export const MUSIC_MUTE = 'MUSIC_MUTE';
 export const MATRIX = 'MATRIX';
 export const NEXT_BLOCK = 'NEXT_BLOCK';
 export const MOVE_BLOCK = 'MOVE_BLOCK';

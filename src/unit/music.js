@@ -13,84 +13,100 @@ const hasWebAudioAPI = {
   data: !!AudioContext && location.protocol.indexOf('http') !== -1,
 };
 
-
 const music = {};
+const samples = {
+  clear: null,
+  fall: null,
+  gameover: null,
+  move: null,
+  rotate: null,
+  start: null,
+};
 
 (() => {
-  if (!hasWebAudioAPI.data) {
-    return;
-  }
-  const url = './music.mp3';
+  if (!hasWebAudioAPI.data) return;
+
   const context = new AudioContext();
-  const req = new XMLHttpRequest();
-  req.open('GET', url, true);
-  req.responseType = 'arraybuffer';
 
-  req.onload = () => {
-    context.decodeAudioData(req.response, (buf) => { // 将拿到的audio解码转为buffer
-      const getSource = () => { // 创建source源。
-        const source = context.createBufferSource();
-        source.buffer = buf;
-        source.connect(context.destination);
-        return source;
-      };
-
-      music.killStart = () => { // 游戏开始的音乐只播放一次
-        music.start = () => {};
-      };
-
-      music.start = () => { // 游戏开始
-        music.killStart();
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 3.7202, 3.6224);
-      };
-
-      music.clear = () => { // 消除方块
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 0, 0.7675);
-      };
-
-      music.fall = () => { // 立即下落
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 1.2558, 0.3546);
-      };
-
-      music.gameover = () => { // 游戏结束
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 8.1276, 1.1437);
-      };
-
-      music.rotate = () => { // 旋转
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 2.2471, 0.0807);
-      };
-
-      music.move = () => { // 移动
-        if (!store.getState().get('music')) {
-          return;
-        }
-        getSource().start(0, 2.9088, 0.1437);
-      };
-    },
-    (error) => {
-      if (window.console && window.console.error) {
-        window.console.error(`音频: ${url} 读取错误`, error);
-        hasWebAudioAPI.data = false;
-      }
-    });
+  const getSource = (buffer) => {
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    return source;
   };
 
-  req.send();
+  music.fetch = (sampleName, url) => {
+    const request = new XMLHttpRequest();
+    request.open('GET', url);
+    request.responseType = 'arraybuffer';
+    request.onload = function () {
+      const undecodedAudio = request.response;
+      context.decodeAudioData(undecodedAudio, (data) => {
+        samples[sampleName] = data;
+        return;
+      }, (error) => {
+        if (window.console && window.console.error) {
+          window.console.error(`音频: ${url} 读取错误`, error);
+          hasWebAudioAPI.data = false;
+        }
+      });
+    };
+    request.send();
+  };
+
+  music.start = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.start) {
+      getSource(samples.start).start(0);
+    }
+  };
+
+  music.clear = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.clear) {
+      getSource(samples.clear).start(0);
+    }
+  };
+
+  music.fall = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.fall) {
+      getSource(samples.fall).start(0);
+    }
+  };
+
+  music.gameover = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.gameover) {
+      getSource(samples.gameover).start(0);
+    }
+  };
+
+  music.rotate = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.rotate) {
+      getSource(samples.rotate).start(0);
+    }
+  };
+
+  music.move = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.move) {
+      getSource(samples.move).start(0);
+    }
+  };
 })();
 
 module.exports = {
