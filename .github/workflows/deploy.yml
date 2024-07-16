@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - audio
+
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy Static Site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build the Site
+        run: yarn build
+
+      - name: Validate AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Sync Site to S3
+        run: |
+          aws s3 sync docs s3://tetris.brandonwkipp.com --cache-control public,max-age=0,must-revalidate --include "*" --exclude "*.js" --exclude "*.css" --exclude "static/*" --delete
+          aws s3 sync docs s3://tetris.brandonwkipp.com --cache-control public,max-age=31536000,immutable --exclude "*" --include "*.js" --include "*.css" --include "static/*" --delete
+
+      - name: Invalidate Cloudfront
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID}} --paths "/*"
