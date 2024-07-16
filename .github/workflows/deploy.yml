@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Build & Deploy Static Site
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
