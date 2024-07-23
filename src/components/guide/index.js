@@ -1,10 +1,9 @@
 import React from 'react';
 import style from './index.less';
 
+import Upload from '../upload';
 import { isMobile } from '../../unit';
 import { transform } from '../../unit/const';
-import { music } from '../../unit/music';
-
 
 export default class Guide extends React.Component {
   constructor() {
@@ -20,12 +19,6 @@ export default class Guide extends React.Component {
         null
       );
     }
-
-    const listener = (e) => {
-      if (e.target.files[0].type.includes('audio')) {
-        music.fetch(e.target.name, URL.createObjectURL(e.target.files[0]));
-      }
-    };
 
     return (
       <div style={{ display: this.state.isMobile ? 'none' : 'block' }}>
@@ -43,24 +36,15 @@ export default class Guide extends React.Component {
           </div>
         </div>
         <div className={`${style.guide} ${style.left}`}>
-          <form>
-            <label htmlFor="clear">Upload file (Clear)</label>
-            <input name="clear" onChange={(e) => listener(e)} type="file" />
-
-            <label htmlFor="fall">Upload file (Fall)</label>
-            <input name="fall" onChange={(e) => listener(e)} type="file" />
-
-            <label htmlFor="gameover">Upload file (Gameover)</label>
-            <input name="gameover" onChange={(e) => listener(e)} type="file" />
-
-            <label htmlFor="move">Upload file (Move)</label>
-            <input name="move" onChange={(e) => listener(e)} type="file" />
-
-            <label htmlFor="rotate">Upload file (Rotate)</label>
-            <input name="rotate" onChange={(e) => listener(e)} type="file" />
-
-            <label htmlFor="start">Upload file (Start)</label>
-            <input name="start" onChange={(e) => listener(e)} type="file" />
+          <form style={{ marginBottom: 0 }}>
+            <Upload name="clear" />
+            <Upload name="fall" />
+            <Upload name="gameover" />
+            <Upload name="move" />
+            <Upload name="rotate" />
+            <Upload name="start" />
+            <Upload name="main" />
+            <Upload name="pause" />
           </form>
           <div className={style.space}>SPACE</div>
         </div>

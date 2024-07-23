@@ -3,8 +3,8 @@ import right from './right';
 import down from './down';
 import rotate from './rotate';
 import space from './space';
-import s from './s';
-import r from './r';
+// import s from './s';
+// import r from './r';
 import p from './p';
 
 export default {
@@ -13,7 +13,7 @@ export default {
   rotate,
   right,
   space,
-  r,
+  // r,
   p,
-  s,
+  // s,
 };

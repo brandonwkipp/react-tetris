@@ -143,8 +143,10 @@ const states = {
     store.dispatch(actions.pause(isPause));
     if (isPause) {
       clearTimeout(states.fallInterval);
+      if (music.pause) music.pause();
       return;
     }
+    if (music.resume) music.resume();
     states.auto();
   },
 

@@ -132,7 +132,7 @@ export default class Keyboard extends React.Component {
           active={keyboard.get('drop')}
           ref={(c) => { this.dom_space = c; }}
         />
-        <Button
+        {/* <Button
           color="red"
           size="s2"
           top={0}
@@ -149,7 +149,7 @@ export default class Keyboard extends React.Component {
           label={`${i18n.sound[lan]}(S)`}
           active={keyboard.get('music')}
           ref={(c) => { this.dom_s = c; }}
-        />
+        /> */}
         <Button
           color="green"
           size="s2"

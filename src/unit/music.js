@@ -13,12 +13,17 @@ const hasWebAudioAPI = {
   data: !!AudioContext && location.protocol.indexOf('http') !== -1,
 };
 
+let mainBuffer;
+let pauseBuffer;
+
 const music = {};
 const samples = {
   clear: null,
   fall: null,
   gameover: null,
+  main: null,
   move: null,
+  pause: null,
   rotate: null,
   start: null,
 };
@@ -58,8 +63,14 @@ const samples = {
     if (store.getState().get('music').mute) {
       return;
     }
+    if (pauseBuffer) pauseBuffer.stop();
     if (samples.start) {
       getSource(samples.start).start(0);
+    }
+    if (samples.main) {
+      mainBuffer = getSource(samples.main);
+      mainBuffer.loop = true;
+      mainBuffer.start(0);
     }
   };
 
@@ -85,17 +96,21 @@ const samples = {
     if (store.getState().get('music').mute) {
       return;
     }
+    if (mainBuffer) mainBuffer.stop();
     if (samples.gameover) {
       getSource(samples.gameover).start(0);
     }
   };
 
-  music.rotate = () => {
+  music.pause = () => {
     if (store.getState().get('music').mute) {
       return;
     }
-    if (samples.rotate) {
-      getSource(samples.rotate).start(0);
+    if (samples.pause) {
+      if (mainBuffer) mainBuffer.stop();
+      pauseBuffer = getSource(samples.pause);
+      pauseBuffer.loop = true;
+      pauseBuffer.start(0);
     }
   };
 
@@ -105,6 +120,27 @@ const samples = {
     }
     if (samples.move) {
       getSource(samples.move).start(0);
+    }
+  };
+
+  music.resume = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.main) {
+      if (pauseBuffer) pauseBuffer.stop();
+      mainBuffer = getSource(samples.main);
+      mainBuffer.loop = true;
+      mainBuffer.start(0);
+    }
+  };
+
+  music.rotate = () => {
+    if (store.getState().get('music').mute) {
+      return;
+    }
+    if (samples.rotate) {
+      getSource(samples.rotate).start(0);
     }
   };
 })();
