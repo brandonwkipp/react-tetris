@@ -44,7 +44,7 @@ export default class Guide extends React.Component {
             <Upload name="rotate" />
             <Upload name="start" />
             <Upload name="main" />
-            <Upload name="pause" />
+            {/* <Upload name="pause" /> */}
           </form>
           <div className={style.space}>SPACE</div>
         </div>
